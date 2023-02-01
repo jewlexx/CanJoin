@@ -58,8 +58,9 @@ public final class CanJoin extends JavaPlugin {
 
             HashMap<String, Integer> map = yamlFile.load(fileInputStream);
 
-            if (getCurrentDate() == map.get("date")) {
+            if (getCurrentDate().equals(map.get("date"))) {
                 playerTimes = map;
+                // Bukkit.getLogger().info(map);
             }
         } catch (FileNotFoundException ignore) {
         }
