@@ -1,6 +1,22 @@
-name: Canjoin
+name: canjoin
 version: '${version}'
-main: com.jewelexx.canjoin.Canjoin
+main: com.jewelexx.canjoin.CanJoin
 api-version: 1.19
 authors: [jewelexx]
 description: Allow users to join a server for a specific amount of time
+
+permissions:
+  manage:
+    description: Permission to manage player times
+    default: op
+
+commands:
+  ignore:
+    description: Prevent certain player(s) from being kicked after the specified time
+    usage: /<command> <players>
+    permission: canjoin.manage
+
+  reset:
+    description: Reset the time for specific player(s)
+    usage: /<command> <players>
+    permission: canjoin.manage

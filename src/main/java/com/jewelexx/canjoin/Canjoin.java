@@ -19,12 +19,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.Yaml;
 
+import com.jewelexx.canjoin.commands.ManageCommands;
+
 import net.kyori.adventure.text.Component;
 
 class CanJoinEvents implements Listener {
-    Canjoin plugin;
+    CanJoin plugin;
 
-    CanJoinEvents(Canjoin plugin) {
+    CanJoinEvents(CanJoin plugin) {
         this.plugin = plugin;
     }
 
@@ -32,7 +34,7 @@ class CanJoinEvents implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         UUID playerId = event.getPlayer().getUniqueId();
 
-        Integer time = plugin.playerTimes.get(playerId.toString());
+        Integer time = plugin.playerTimes.getOrDefault(playerId.toString(), 0);
 
         if (time >= this.plugin.maxTime) {
             Component kickMessage = Component.text("You have been kicked for playing too long");
@@ -41,12 +43,14 @@ class CanJoinEvents implements Listener {
     }
 }
 
-public final class Canjoin extends JavaPlugin {
+public final class CanJoin extends JavaPlugin {
     int maxTime;
     HashMap<String, Integer> playerTimes = new HashMap<>();
 
     @Override
     public void onEnable() {
+        resetPlayerTimes();
+
         try {
             File timesFile = new File("player-times.yml");
             FileInputStream fileInputStream = new FileInputStream(timesFile);
@@ -66,17 +70,27 @@ public final class Canjoin extends JavaPlugin {
         // Register events
         getServer().getPluginManager().registerEvents(new CanJoinEvents(this), this);
 
+        getCommand("ignore").setExecutor(new ManageCommands());
+        getCommand("reset").setExecutor(new ManageCommands());
+
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
             public void run() {
                 // Reset the player times on a new day
-                if (getCurrentDate() != playerTimes.get("date")) {
-                    playerTimes = new HashMap<>();
+                if (!getCurrentDate().equals(playerTimes.get("date"))) {
+                    Bukkit.getLogger().info(getCurrentDate().toString());
+                    Bukkit.getLogger().info(playerTimes.get("date").toString());
+                    resetPlayerTimes();
                 }
 
                 Bukkit.getOnlinePlayers().forEach((player) -> updatePlayerTime(player));
             }
         }, 20L, 20L);
+    }
+
+    public void resetPlayerTimes() {
+        playerTimes = new HashMap<>();
+        playerTimes.put("date", getCurrentDate());
     }
 
     public void updatePlayerTime(Player player) {
