@@ -21,7 +21,6 @@ public class ManageCommands implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
             @NotNull String[] args) {
-        sender.sendMessage(label);
         if (label.equals("ignore")) {
             if (args.length == 0) {
                 sender.sendMessage("[CanJoin] Please specify a player to ignore");
@@ -30,9 +29,15 @@ public class ManageCommands implements CommandExecutor {
 
             for (String arg : args) {
                 Player player = Bukkit.getPlayer(arg);
-                sender.sendMessage("[CanJoin] Ignoring " + player.getName());
 
-                plugin.ignoredPlayers.add(player.getUniqueId().toString());
+                String pid = player.getUniqueId().toString();
+                if (plugin.ignoredPlayers.contains(pid)) {
+                    sender.sendMessage("[CanJoin] Un-ignoring " + player.getName());
+                    plugin.ignoredPlayers.remove(pid);
+                } else {
+                    sender.sendMessage("[CanJoin] Ignoring " + player.getName());
+                    plugin.ignoredPlayers.add(pid);
+                }
                 plugin.updateConfig();
             }
 

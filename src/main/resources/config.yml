@@ -2,4 +2,4 @@
 max-time: 3600
 
 # The UUIDs to ignore
-ignore-list: []
+ignored-players: []
