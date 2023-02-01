@@ -12,7 +12,7 @@ public class ManageCommands implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
             @NotNull String[] args) {
         sender.sendMessage(label);
-        if (label == "ignore") {
+        if (label.equals("ignore")) {
             if (args.length == 0) {
                 sender.sendMessage("Please specify a player to ignore");
                 return false;
@@ -24,8 +24,12 @@ public class ManageCommands implements CommandExecutor {
                 Player player = Bukkit.getPlayer(arg);
                 sender.sendMessage(player.getUniqueId());
             }
-        }
 
-        return true;
+            return true;
+        } else if (label.equals("reset")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
