@@ -15,6 +15,7 @@ url = 'https://oss.sonatype.org/content/groups/public/'
 } }
 
 dependencies {
+implementation 'org.yaml:snakeyaml:1.33'
 compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT' }
 
 def targetJavaVersion = 17
