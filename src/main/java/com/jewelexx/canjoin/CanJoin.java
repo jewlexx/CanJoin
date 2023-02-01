@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -41,8 +43,9 @@ class CanJoinEvents implements Listener {
 }
 
 public final class CanJoin extends JavaPlugin {
+    public ArrayList<String> ignoredPlayers;
+    public HashMap<String, Integer> playerTimes = new HashMap<>();
     int maxTime;
-    HashMap<String, Integer> playerTimes = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -63,6 +66,7 @@ public final class CanJoin extends JavaPlugin {
 
         saveDefaultConfig();
         maxTime = getConfig().getInt("max-time");
+        ignoredPlayers = new ArrayList<>((List<String>) getConfig().getList("ignored-players"));
 
         // Register events
         getServer().getPluginManager().registerEvents(new CanJoinEvents(this), this);
@@ -88,8 +92,18 @@ public final class CanJoin extends JavaPlugin {
         playerTimes.put("date", getCurrentDate());
     }
 
+    public void updateConfig() {
+        getConfig().set("ignored-players", ignoredPlayers);
+        saveConfig();
+    }
+
     public void updatePlayerTime(Player player) {
         UUID playerId = player.getUniqueId();
+
+        if (ignoredPlayers.contains(playerId.toString())) {
+            return;
+        }
+
         Integer time = playerTimes.get(playerId.toString());
 
         if (time == null) {

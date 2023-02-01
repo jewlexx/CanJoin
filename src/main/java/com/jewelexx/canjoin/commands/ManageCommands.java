@@ -1,5 +1,7 @@
 package com.jewelexx.canjoin.commands;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,19 +24,32 @@ public class ManageCommands implements CommandExecutor {
         sender.sendMessage(label);
         if (label.equals("ignore")) {
             if (args.length == 0) {
-                sender.sendMessage("Please specify a player to ignore");
+                sender.sendMessage("[CanJoin] Please specify a player to ignore");
                 return false;
-            } else {
-                sender.sendMessage("Ignoring " + args[0]);
             }
 
             for (String arg : args) {
                 Player player = Bukkit.getPlayer(arg);
-                sender.sendMessage(player.getUniqueId());
+                sender.sendMessage("[CanJoin] Ignoring " + player.getName());
+
+                plugin.ignoredPlayers.add(player.getUniqueId().toString());
+                plugin.updateConfig();
             }
 
             return true;
         } else if (label.equals("reset")) {
+            if (args.length == 0) {
+                sender.sendMessage("[CanJoin] Resetting all player times");
+                plugin.playerTimes = new HashMap<>();
+            }
+
+            for (String arg : args) {
+                Player player = Bukkit.getPlayer(arg);
+                sender.sendMessage("[CanJoin] Resetting " + player.getName());
+
+                plugin.playerTimes.remove(player.getUniqueId().toString());
+            }
+
             return true;
         } else {
             return false;
