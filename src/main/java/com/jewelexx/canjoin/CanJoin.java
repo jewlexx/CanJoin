@@ -70,8 +70,8 @@ public final class CanJoin extends JavaPlugin {
         // Register events
         getServer().getPluginManager().registerEvents(new CanJoinEvents(this), this);
 
-        getCommand("ignore").setExecutor(new ManageCommands());
-        getCommand("reset").setExecutor(new ManageCommands());
+        getCommand("ignore").setExecutor(new ManageCommands(this));
+        getCommand("reset").setExecutor(new ManageCommands(this));
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
