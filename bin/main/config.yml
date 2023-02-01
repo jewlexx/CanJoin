@@ -1,0 +1,2 @@
+# Max time, in seconds. Default is 1 hour
+max-time: 3600
