@@ -12,7 +12,7 @@ import com.jewelexx.canjoin.CanJoin;
 public class ManageCommands implements CommandExecutor {
     CanJoin plugin;
 
-    ManageCommands(CanJoin plugin) {
+    public ManageCommands(CanJoin plugin) {
         this.plugin = plugin;
     }
 

@@ -21,8 +21,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.jewelexx.canjoin.commands.ManageCommands;
 
-import net.kyori.adventure.text.Component;
-
 class CanJoinEvents implements Listener {
     CanJoin plugin;
 
@@ -37,8 +35,7 @@ class CanJoinEvents implements Listener {
         Integer time = plugin.playerTimes.getOrDefault(playerId.toString(), 0);
 
         if (time >= this.plugin.maxTime) {
-            Component kickMessage = Component.text("You have been kicked for playing too long");
-            event.getPlayer().kick(kickMessage);
+            event.getPlayer().kickPlayer("You have been kicked for playing too long");
         }
     }
 }
@@ -98,8 +95,7 @@ public final class CanJoin extends JavaPlugin {
         if (time == null) {
             time = 0;
         } else if (time > maxTime) {
-            Component kickMessage = Component.text("You have been kicked for playing too long");
-            player.kick(kickMessage);
+            player.kickPlayer("You have been kicked for playing too long");
         }
 
         playerTimes.put(playerId.toString(), time + 1);
