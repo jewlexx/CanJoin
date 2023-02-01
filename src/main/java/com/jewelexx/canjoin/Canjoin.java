@@ -78,8 +78,6 @@ public final class CanJoin extends JavaPlugin {
             public void run() {
                 // Reset the player times on a new day
                 if (!getCurrentDate().equals(playerTimes.get("date"))) {
-                    Bukkit.getLogger().info(getCurrentDate().toString());
-                    Bukkit.getLogger().info(playerTimes.get("date").toString());
                     resetPlayerTimes();
                 }
 
