@@ -1,6 +1,0 @@
-name: Canjoin
-version: '${version}'
-main: com.jewelexx.canjoin.Canjoin
-api-version: 1.19
-authors: [jewelexx]
-description: Allow users to join a server for a specific amount of time
