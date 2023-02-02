@@ -60,7 +60,6 @@ public final class CanJoin extends JavaPlugin {
 
             if (getCurrentDate().equals(map.get("date"))) {
                 playerTimes = map;
-                // Bukkit.getLogger().info(map);
             }
         } catch (FileNotFoundException ignore) {
         }
@@ -114,8 +113,6 @@ public final class CanJoin extends JavaPlugin {
         }
 
         playerTimes.put(playerId.toString(), time + 1);
-
-        getLogger().info("Player " + player.getName() + " has been online for " + time + " seconds");
     }
 
     public Integer getCurrentDate() {
