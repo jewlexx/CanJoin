@@ -3,6 +3,7 @@ package com.jewelexx.canjoin.commands;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,14 +30,29 @@ public class ManageCommands implements CommandExecutor {
 
             for (String arg : args) {
                 Player player = Bukkit.getPlayer(arg);
+                String uid = "";
 
-                String pid = player.getUniqueId().toString();
-                if (plugin.ignoredPlayers.contains(pid)) {
-                    sender.sendMessage("[CanJoin] Un-ignoring " + player.getName());
-                    plugin.ignoredPlayers.remove(pid);
+                if (player == null) {
+                    // We must use the deprecated method here because we need to get the UUID from
+                    // an offline player
+                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(arg);
+
+                    if (offlinePlayer != null) {
+                        uid = offlinePlayer.getUniqueId().toString();
+                    } else {
+                        sender.sendMessage("[CanJoin] Player " + arg + " not found");
+                        return true;
+                    }
                 } else {
-                    sender.sendMessage("[CanJoin] Ignoring " + player.getName());
-                    plugin.ignoredPlayers.add(pid);
+                    uid = player.getUniqueId().toString();
+                }
+
+                if (plugin.ignoredPlayers.contains(uid)) {
+                    sender.sendMessage("[CanJoin] Un-ignoring " + arg);
+                    plugin.ignoredPlayers.remove(uid);
+                } else {
+                    sender.sendMessage("[CanJoin] Ignoring " + arg);
+                    plugin.ignoredPlayers.add(uid);
                 }
                 plugin.updateConfig();
             }
@@ -50,9 +66,26 @@ public class ManageCommands implements CommandExecutor {
 
             for (String arg : args) {
                 Player player = Bukkit.getPlayer(arg);
-                sender.sendMessage("[CanJoin] Resetting " + player.getName());
+                String uid = "";
 
-                plugin.playerTimes.remove(player.getUniqueId().toString());
+                if (player == null) {
+                    // We must use the deprecated method here because we need to get the UUID from
+                    // an offline player
+                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(arg);
+
+                    if (offlinePlayer != null) {
+                        uid = offlinePlayer.getUniqueId().toString();
+                    } else {
+                        sender.sendMessage("[CanJoin] Player " + arg + " not found");
+                        return true;
+                    }
+                } else {
+                    uid = player.getUniqueId().toString();
+                }
+
+                sender.sendMessage("[CanJoin] Resetting " + arg);
+
+                plugin.playerTimes.remove(uid);
             }
 
             return true;
